@@ -7,7 +7,7 @@ Use the published image and [Compose file](../docker-compose.yml). In 1Panel, cr
 1. Start with `docker compose up -d`.
 2. Configure an HTTPS reverse proxy.
 3. Open the site through a controlled connection and complete first-run setup before public access. Set the public origin, such as `https://rss.example.com`.
-4. Connect the PAT in Settings. Add subscriptions or manual tasks.
+4. Connect the PAT in the second setup step. Then add subscriptions or manual tasks. Setup resumes after login until a PAT is verified. Existing accounts with expired PATs retain dashboard access. Update the PAT in Settings.
 
 Only `APP_LISTEN` and `APP_DATA_DIR` remain optional process settings. Container defaults: `0.0.0.0:8080`, `/data`. Local defaults: `127.0.0.1:8080`, `data`.
 

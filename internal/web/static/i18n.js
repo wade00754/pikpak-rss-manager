@@ -9,6 +9,14 @@ const messageUpdates = {
   '改名結果無法確認，已保留目前檔名。PikPak 不允許改成同資料夾內的重複檔名，請檢查是否有同名檔案並排除衝突後重試':'改名未確認，請檢查同名衝突後重試',
 };
 const translations = {
+  '設定進度':'Setup progress','連接 PikPak':'Connect PikPak','下一步':'Next',
+  'PAT 需具備「讀寫檔案」及「雲端下載」權限。':'PAT requires Read & write files and Cloud Download permissions.',
+  '建立 PAT ↗':'Create PAT ↗','有效期與配額':'Expiry and quota','驗證並完成設定':'Connect and finish setup','PikPak RSS · 連接 PikPak':'PikPak RSS · Connect PikPak',
+
+  '切換為英文':'Switch to English','切換為繁體中文':'Switch to Traditional Chinese',
+  '網站網址說明':'Site URL help','內網 RSS 說明':'Private network feed help',
+  '預填目前網址。使用反向代理時填入對外網址。':'The current URL is prefilled. Use the public origin when behind a reverse proxy.',
+  '相同密碼':'Same password',
   '下載所選項目':'Download selected items',
   '下載所選項目？':'Download selected items?',
   '勾選要下載的種子；多檔種子會下載整筆內容，保留原始目錄結構。':'Select torrents to download. Multi-file torrents download in full and keep their directory structure.',
@@ -45,7 +53,7 @@ const translations = {
   '離線任務':'Offline tasks',
   '執行日誌':'Logs',
   '系統設定':'Settings',
-  '登出 ↗':'Sign out',
+  '登出':'Sign out',
   '↻ 重新整理':'↻ Refresh',
   '＋ 新增訂閱':'+ Add subscription',
   '新增訂閱':'Add subscription',
@@ -75,7 +83,6 @@ const translations = {
   '貼上 PAT':'Paste PAT',
   '驗證並綁定':'Connect',
   '重新檢查連線':'Check connection',
-  '關於授權與配額':'Token and quota',
   'PAT 有效期為 30 天至一年，請在到期前更新。':'Renew your PAT before it expires (30 days to one year).',
   '已連接的應用共用各流量維度月配額的 25%，包含雲端離線下載。':'Connected apps share 25% of each monthly traffic quota, including offline downloads.',
   '開啟官方 PAT 說明 ↗':'PAT documentation ↗',
@@ -129,11 +136,11 @@ const translations = {
   'PikPak RSS · 首次設定':'Setup · PikPak RSS',
   '登入':'Sign in',
   '首次設定':'Initial setup',
-  '管理密碼':'Administrator password',
-  '輸入你的管理密碼':'Enter password',
-  '設定你的管理密碼':'Create password',
-  '再次輸入管理密碼':'Confirm password',
-  '確認管理密碼':'Confirm password',
+  '密碼':'Password',
+  '輸入你的密碼':'Enter password',
+  '設定你的密碼':'Create password',
+  '再次輸入密碼':'Confirm password',
+  '確認密碼':'Confirm password',
   '預填目前網址；使用反向代理時填入對外網址。':'Use the public origin when behind a reverse proxy.',
   '建立管理員':'Create administrator',
   '下載連結':'Download URL',
@@ -181,7 +188,6 @@ const translations = {
   '連線正常':'Connected',
   '已暫停':'Paused',
   '請重新檢查 PikPak 連線。':'Check the PikPak connection.',
-  '先到「系統設定」綁定 PikPak，再開始自動追蹤。':'Connect PikPak in Settings.',
   'PikPak 帳號':'PikPak account',
   ' 雲端空間':' storage',
   '綁定 PikPak PAT 後即可列出或建立資料夾；也可先手動輸入路徑。':'Connect PikPak to browse folders, or enter a path.',
@@ -297,22 +303,21 @@ const translations = {
   '目錄分頁重複，停止處理':'Repeated directory page. Processing stopped.',
   '目錄超過處理上限':'Directory exceeds the processing limit.',
   '目標目錄有同名檔案或多個同名目錄，請先整理':'Destination has conflicting files or duplicate folders. Resolve them first.',
-  '管理密碼驗證值損毀':'Administrator verifier is damaged.',
-  '管理密碼驗證值不可為空':'Administrator verifier cannot be empty.',
-  '無法建立管理密碼驗證值':'Could not create the password verifier.',
-  '管理密碼驗證值損毀；請保留資料並還原備份':'Password verifier is damaged. Preserve data and restore a backup.',
+  '密碼驗證值損毀':'Password verifier is damaged.',
+  '密碼驗證值不可為空':'Password verifier cannot be empty.',
+  '無法建立密碼驗證值':'Could not create the password verifier.',
+  '密碼驗證值損毀；請保留資料並還原備份':'Password verifier is damaged. Preserve data and restore a backup.',
   '登入嘗試過多，請一分鐘後再試':'Too many login attempts. Retry in one minute.',
   '正在處理其他登入或初始化請求，請稍後再試':'Another login/setup request is running. Try again.',
   '請求驗證失敗':'Request validation failed.',
   '初始化已完成，請登入':'Setup is complete. Sign in.',
-  '請輸入管理密碼':'Enter an administrator password.',
+  '請輸入密碼':'Enter a password.',
   '兩次輸入的密碼不一致':'Passwords do not match.',
   '無法儲存初始化設定，請重試':'Could not save setup. Try again.',
   '初始化已完成，請重新整理並登入':'Setup is complete. Refresh and sign in.',
   '請先完成初始化':'Complete setup first.',
   '密碼不正確':'Incorrect password.',
   '無法保存網站設定':'Could not save site settings.',
-  '修改管理密碼':'Change administrator password',
   '目前密碼':'Current password',
   '新密碼':'New password',
   '再次輸入新密碼':'Confirm new password',
@@ -321,7 +326,7 @@ const translations = {
   '請輸入目前密碼':'Enter the current password.',
   '請輸入新密碼':'Enter a new password.',
   '目前密碼不正確':'Current password is incorrect.',
-  '無法保存管理密碼，請重試':'Could not save the administrator password. Try again.',
+  '無法保存密碼，請重試':'Could not save the password. Try again.',
   '作品名稱必須為 1–500 位元組':'Name must be 1–500 bytes.',
   '正則表達式過長':'Regex is too long.',
   'Regex 不符合 Go RE2 語法；不支援 lookbehind 或反向參照':'Invalid Go RE2 regex. Lookbehind and backreferences are unsupported.',
@@ -414,6 +419,13 @@ function initializeLanguage(){
   for(const picker of document.querySelectorAll('.language-select')){
     picker.value=language;
     picker.addEventListener('change',()=>{try{localStorage.setItem('language',picker.value);}catch{}location.reload();});
+  }
+  for(const button of document.querySelectorAll('.language-toggle')){
+    const next=language==='en'?'zh-Hant':'en';
+    button.textContent=next==='en'?'English':'繁體中文';
+    button.lang=next;
+    button.setAttribute('aria-label',t(next==='en'?'切換為英文':'切換為繁體中文'));
+    button.addEventListener('click',()=>{try{localStorage.setItem('language',next);}catch{}location.reload();});
   }
 }
 initializeLanguage();

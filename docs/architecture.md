@@ -30,8 +30,10 @@ PAT requires Read & write files and Cloud Download. The MCP adapter has no move,
 - Feed/torrent metadata: 2 MiB per resource. Full sample reads: one feed snapshot, each distinct torrent once, at most five concurrent requests, 32 MiB total metadata, 10,000 filenames/8 MiB output, 90-second overall and 15-second torrent timeouts. Partial successes are retained.
 - Preview reads metadata only. It does not submit tasks or change baselines. The shared renderer returns raw_name, normalized name and warnings.
 - Selected folder IDs carry opaque account references. The server revalidates IDs/account ownership. Folder creation is sent once. Uncertain results require review.
+- First-run UI: administrator creation, then PAT connection. Authenticated users without a saved or connected account resume the connection step. Saved accounts retain the dashboard when authorization expires. Connection errors appear in Settings.
 - First-run password: nonempty, salted Argon2id verifier. PATs/private URLs: AES-GCM with a persistent secret.key. Credentials are never returned or logged. No external password/PAT sources or .env loading.
 - Sessions: 12 hours, memory only. Mutations require matching CSRF cookie/header and same-origin checks. HTTP-only/SameSite cookies, login throttling and CSP are enabled.
+- Management pages place theme and language controls in the sidebar footer with connection status, version and sign-out. The footer remains accessible on narrow screens. Navigation and theme icons use a consistent 20 px size. Desktop navigation uses a 12 px icon-to-label gap. Setup and login retain their header controls.
 - UI language is a browser preference. Only application literals and message fields are translated. Names, paths, URLs, regex and filenames remain intact.
 
 ## Authentication

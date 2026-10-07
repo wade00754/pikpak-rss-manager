@@ -185,6 +185,13 @@ func (s *Server) Handler() http.Handler {
 			name = "setup.html"
 		} else if s.authenticated(r) {
 			name = "app.html"
+			status := pikpak.Status{}
+			if s.Manager != nil {
+				status = s.Manager.Status()
+			}
+			if !status.Connected && status.Source == "" {
+				name = "onboarding.html"
+			}
 		}
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		_ = s.templates.ExecuteTemplate(w, name, map[string]string{"Version": s.Version})

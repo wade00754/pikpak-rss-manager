@@ -59,6 +59,7 @@ test-ui:
 	$(NODE) --check internal/web/static/i18n.js
 	$(NODE) tests/web/i18n.test.cjs
 	$(NODE) tests/web/direct.test.cjs
+	$(NODE) tests/web/onboarding.test.cjs
 
 verify: check-format test vet test-ui build
 

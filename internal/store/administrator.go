@@ -21,7 +21,7 @@ func (s *Store) Administrator(ctx context.Context) (string, AppSettings, error) 
 		return "", settings, nil
 	}
 	if err == nil && hash == "" {
-		return "", settings, errors.New("管理密碼驗證值損毀")
+		return "", settings, errors.New("密碼驗證值損毀")
 	}
 	return hash, settings, err
 }
@@ -30,7 +30,7 @@ func (s *Store) Administrator(ctx context.Context) (string, AppSettings, error) 
 // and processes. A completed setup can never be overwritten by this method.
 func (s *Store) InitializeAdministrator(ctx context.Context, hash string, settings AppSettings) (bool, error) {
 	if hash == "" {
-		return false, errors.New("管理密碼驗證值不可為空")
+		return false, errors.New("密碼驗證值不可為空")
 	}
 	r, err := s.db.ExecContext(ctx, "INSERT INTO administrator(id,password_hash,public_url,allow_private_feeds) VALUES(1,?,?,?) ON CONFLICT(id) DO NOTHING", hash, settings.PublicURL, settings.AllowPrivateFeeds)
 	if err != nil {
@@ -49,7 +49,7 @@ func (s *Store) SaveAppSettings(ctx context.Context, settings AppSettings) error
 // password change or alter the administrator's application settings.
 func (s *Store) ChangeAdministratorPassword(ctx context.Context, previous, hash string) error {
 	if hash == "" {
-		return errors.New("管理密碼驗證值不可為空")
+		return errors.New("密碼驗證值不可為空")
 	}
 	r, err := s.db.ExecContext(ctx, "UPDATE administrator SET password_hash=? WHERE id=1 AND password_hash=?", hash, previous)
 	if err != nil {

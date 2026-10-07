@@ -10,7 +10,7 @@ Requires Docker and Docker Compose. Download [docker-compose.yml](docker-compose
 docker compose up -d
 ```
 
-On the same machine, open [http://127.0.0.1:8080](http://127.0.0.1:8080), create an administrator password, confirm the public URL, and enter a PikPak PAT in **Settings**.
+On the same machine, open [http://127.0.0.1:8080](http://127.0.0.1:8080) and follow setup: create a password, confirm the public URL, then connect a PikPak PAT. The dashboard opens after verification. Update the PAT later in **Settings**.
 
 Compose listens on localhost only. For remote access, configure an HTTPS reverse proxy using the [deployment guide](docs/deployment.md), which also covers 1Panel and process settings.
 

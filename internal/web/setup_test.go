@@ -112,7 +112,7 @@ func TestFirstWebSetupAndRestart(t *testing.T) {
 	if !refreshCSRF() {
 		t.Fatal("setup state not persisted")
 	}
-	if code, body := request("GET", "/", nil, ""); code != 200 || !strings.Contains(body, `id="view-settings"`) {
+	if code, body := request("GET", "/", nil, ""); code != 200 || !strings.Contains(body, `data-onboarding="true"`) {
 		t.Fatal("setup did not create session")
 	}
 	if code, _ := request("POST", "/api/setup", map[string]string{"password": "overwrite", "confirm_password": "overwrite"}, server.URL); code != 409 {

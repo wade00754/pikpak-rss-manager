@@ -242,7 +242,7 @@ func (c *smokeClient) session(ctx context.Context) (smokeSession, error) {
 	return session, err
 }
 
-func (c *smokeClient) checkPageVersion(ctx context.Context, version string) error {
+func (c *smokeClient) checkPageContent(ctx context.Context, content string) error {
 	req, err := http.NewRequestWithContext(ctx, "GET", c.baseURL+"/", nil)
 	if err != nil {
 		return err
@@ -256,8 +256,8 @@ func (c *smokeClient) checkPageVersion(ctx context.Context, version string) erro
 	if err != nil {
 		return err
 	}
-	if resp.StatusCode != 200 || !strings.Contains(string(page), `<span class="version">`+version+`</span>`) {
-		return errors.New("page application version missing")
+	if resp.StatusCode != 200 || !strings.Contains(string(page), content) {
+		return errors.New("expected page content missing")
 	}
 	return nil
 }
@@ -274,7 +274,7 @@ func (c *smokeClient) checkInitial(ctx context.Context, version string) error {
 	if health.Version != version || session.Version != version || session.Initialized {
 		return errors.New("unexpected health/session version or pre-existing setup")
 	}
-	if err := c.checkPageVersion(ctx, version); err != nil {
+	if err := c.checkPageContent(ctx, `id="setup-form"`); err != nil {
 		return err
 	}
 	return c.request(ctx, "GET", "/api/subscriptions", nil, 401, nil)
@@ -309,7 +309,7 @@ func (c *smokeClient) initialize(ctx context.Context, password, version string) 
 	if err := c.request(ctx, "POST", "/api/setup", setup, 409, nil); err != nil {
 		return 0, err
 	}
-	if err := c.checkPageVersion(ctx, version); err != nil {
+	if err := c.checkPageContent(ctx, `data-onboarding="true"`); err != nil {
 		return 0, err
 	}
 	var subscription smokeSubscription

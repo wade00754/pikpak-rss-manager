@@ -248,14 +248,15 @@ h3 {
   border-right:1px solid var(--line);
   display:flex;
   flex-direction:column;
-  padding:28px 22px;
-  z-index:20
+  padding:28px 20px;
+  z-index:20;
+  overflow-y:auto
 }
 
 .brand {
   display:flex;
   align-items:center;
-  gap:11px;
+  gap:12px;
   text-decoration:none;
   font-size:17px;
   letter-spacing:-.3px
@@ -268,28 +269,30 @@ h3 {
 
 .sidebar nav {
   display:grid;
-  gap:8px
+  gap:8px;
+  margin-top:32px;
+  flex-shrink:0
 }
 
 .nav-item {
   border:0;
   background:none;
   text-align:left;
-  padding:12px 15px;
+  min-height:44px;
+  padding:12px;
   border-radius:10px;
-  color:#898494;
+  color:var(--muted);
   display:flex;
-  gap:13px;
+  gap:12px;
   align-items:center;
   font-size:13px;
   font-weight:550
 }
 
-.nav-item span {
-  font-size:19px;
-  width:21px;
-  text-align:center;
-  line-height:1
+.nav-icon {
+  width:20px;
+  height:20px;
+  flex-shrink:0
 }
 
 .nav-item:hover {
@@ -305,18 +308,45 @@ h3 {
 .sidebar-bottom {
   margin-top:auto;
   border-top:1px solid var(--line);
-  padding:22px 10px 0
+  padding:20px 0 0;
+  display:flex;
+  flex-direction:column;
+  gap:16px
 }
 
-.sidebar-bottom p {
-  font-size:10px;
-  margin:10px 0;
-  color:#aaa5b5
+.sidebar-bottom .appearance-controls {
+  gap:8px
 }
 
-.sidebar-bottom .text-button {
-  display:block;
-  margin-top:16px
+.sidebar-bottom .theme-toggle {
+  width:40px;
+  height:40px
+}
+
+.sidebar-bottom .language-select {
+  flex:1;
+  min-width:0;
+  height:40px
+}
+
+.sidebar-session {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.sidebar-session .text-button {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:40px
+}
+
+.session-icon {
+  width:16px;
+  height:16px;
+  flex-shrink:0
 }
 
 .connection-pill {
@@ -332,16 +362,6 @@ h3 {
   min-height:100vh;
   display:flex;
   flex-direction:column
-}
-
-.topbar {
-  height:75px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
-  background:#ffffffb5
 }
 
 .content {
@@ -1103,6 +1123,7 @@ dialog::backdrop {
 }
 
 .setup-page .login-header {
+  align-items:flex-start;
   margin-bottom:20px;
 }
 
@@ -1114,9 +1135,61 @@ dialog::backdrop {
   margin-bottom:18px;
 }
 
-.setup-page .login-footer {
-  margin-top:16px;
+.setup-page .appearance-controls { gap:8px; }
+.setup-page .theme-toggle { width:40px; height:40px; padding:8px; }
+.language-toggle {
+  height:40px;
+  min-width:88px;
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--surface);
+  color:var(--ink);
 }
+.language-toggle:hover { background:var(--accent-light); }
+.setup-page .login-form { display:grid; gap:20px; }
+.setup-field { display:grid; gap:8px; }
+.setup-field input { margin-top:0; }
+.setup-label-row { display:flex; align-items:center; }
+.setup-page .checkbox-label { gap:8px; }
+.setup-page .checkbox-label input { width:16px; height:16px; margin:0; flex-shrink:0; }
+.setup-help { position:relative; }
+.setup-help summary {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:40px;
+  height:32px;
+  color:var(--muted);
+  cursor:pointer;
+  list-style:none;
+  border-radius:4px;
+}
+.setup-help summary::after { content:""; position:absolute; width:40px; height:40px; }
+.setup-help summary::-webkit-details-marker { display:none; }
+.setup-help summary:focus-visible { outline:3px solid #c7b7ff; outline-offset:3px; }
+.setup-help summary:hover,.setup-help[open] summary { color:var(--accent); }
+.setup-help svg { width:16px; height:16px; }
+.setup-help-content {
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  z-index:1;
+  width:224px;
+  max-width:calc(100vw - 48px);
+  margin:0;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--surface);
+  box-shadow:var(--shadow);
+  color:var(--ink);
+  font-size:12px;
+}
+.setup-private-feeds .setup-help-content { left:auto; right:0; }
+.setup-page .login-form>.button { margin-top:4px; }
+.setup-page .login-form>.error { margin:0; }
+.setup-page .login-form>.error:empty { display:none; }
 
 .login-shell h1 {
   font-size:42px;
@@ -1190,10 +1263,6 @@ dialog::backdrop {
   padding:30px 28px
 }
 
-.topbar {
-  padding:0 28px
-}
-
 .subscriptions-grid {
   grid-template-columns:repeat(2,minmax(0,1fr))
 }
@@ -1224,7 +1293,7 @@ dialog::backdrop {
 @media(max-width:900px) {
   .sidebar {
   width:185px;
-  padding:23px 15px
+  padding:24px 16px
 }
 
 .main {
@@ -1233,11 +1302,7 @@ dialog::backdrop {
 
 .brand {
   font-size:15px;
-  gap:8px
-}
-
-.nav-item {
-  padding:11px
+  gap:12px
 }
 
 .stats-grid {
@@ -1282,7 +1347,7 @@ dialog::backdrop {
   .sidebar {
   position:static;
   width:100%;
-  padding:17px 20px 10px;
+  padding:16px 20px 12px;
   border-right:0;
   border-bottom:1px solid var(--line)
 }
@@ -1297,35 +1362,57 @@ dialog::backdrop {
 }
 
 .sidebar-bottom {
-  display:none
+  margin-top:16px;
+  padding-top:16px;
+  flex-direction:row;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px 16px
+}
+
+.sidebar-bottom .appearance-controls {
+  order:1
+}
+
+.sidebar-bottom .theme-toggle {
+  width:44px;
+  height:44px
+}
+
+.sidebar-bottom .language-select {
+  height:44px
+}
+
+.sidebar-session .text-button {
+  min-height:44px
+}
+
+.sidebar-bottom .connection-pill {
+  order:0
+}
+
+.sidebar-session {
+  order:2;
+  width:100%
 }
 
 .sidebar nav {
   display:flex;
-  gap:3px;
-  margin-top:17px;
+  gap:4px;
+  margin-top:16px;
   overflow-x:auto
 }
 
 .nav-item {
   flex-shrink:0;
-  padding:8px 10px;
-  font-size:10px;
-  gap:6px
-}
-
-.nav-item span {
-  font-size:15px;
-  width:16px
+  padding:8px 12px;
+  font-size:12px;
+  gap:8px
 }
 
 .main {
   margin-left:0
-}
-
-.topbar {
-  height:50px;
-  padding:0 20px
 }
 
 .content {
@@ -1494,36 +1581,17 @@ dialog {
 
 }
 
-.topbar-actions {
-  display:flex;
-  align-items:center;
-  gap:18px
-}
-
-.mobile-only {
-  display:none
-}
-
-@media(max-width:900px) {
-  .mobile-only {
-  display:inline-flex
-}
-
-}
-
 /* Dialog scroll stays inside the rounded shell at every viewport size. */
 #subscription-dialog { padding:0; overflow:hidden; }
 #subscription-dialog .dialog-scroll { max-height:calc(90dvh - 2px); overflow-y:auto; padding:27px; scrollbar-gutter:stable; }
 textarea { resize:none; }
 .folder-icon { width:20px; height:20px; flex-shrink:0; vertical-align:middle; }
-.sidebar nav { margin-top:32px; }
 .language-select { font:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:8px; }
 .language-select:focus-visible,select:focus-visible { outline:3px solid #c7b7ff; outline-offset:3px; }
 .login-page { display:flex; justify-content:center; }
 .login-shell { width:min(378px,100%); padding:40px 24px; }
 @media(max-width:600px) { #subscription-dialog .dialog-scroll { max-height:calc(94dvh - 2px); padding:22px; } }
 
-.topbar-actions { margin-left:auto; }
 .job-actions { display:flex; align-items:center; gap:14px; white-space:nowrap; }
 #view-jobs .toolbar { flex-wrap:wrap; gap:12px; }
 @media(max-width:600px) {
@@ -1535,3 +1603,28 @@ textarea { resize:none; }
   #overview-jobs .job-name,#jobs-list .job-name,#overview-jobs td:last-child,#jobs-list td:last-child { grid-column:1 / -1; }
   .job-actions { justify-content:flex-end; }
 }
+
+/* First-run setup shares the login layout and existing theme tokens. */
+.onboarding-progress {
+  display:flex;
+  gap:24px;
+  width:100%;
+  margin:0 0 24px;
+  padding:0;
+  list-style:none;
+  color:var(--muted);
+  font-size:12px;
+}
+.onboarding-progress li { display:flex; align-items:center; gap:8px; }
+.onboarding-progress [aria-current=step] { color:var(--accent); font-weight:650; }
+.step-number { display:grid; place-items:center; width:24px; height:24px; border:1px solid var(--line); border-radius:50%; flex-shrink:0; }
+[aria-current=step] .step-number { background:var(--accent-light); border-color:var(--accent); }
+.token-help .field-help { margin:0 0 8px; }
+.token-notes { margin-top:16px; }
+.token-notes summary { cursor:pointer; color:var(--muted); font-size:12px; padding:8px 0; }
+.token-notes summary:focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+.token-notes p:last-child { margin-bottom:0; }
+.onboarding-logout { margin-top:24px; align-self:flex-end; }
+button.connection-pill { width:100%; padding:0; border:0; background:transparent; color:var(--muted); text-align:left; }
+button.connection-pill:hover { color:var(--accent); }
+#settings-connection-status:empty,#token-error:empty { display:none; }

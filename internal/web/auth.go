@@ -21,7 +21,7 @@ const passwordPrefix = "$argon2id$v=19$m=65536,t=3,p=2$"
 func hashPassword(password string) (string, error) {
 	salt := make([]byte, 16)
 	if _, err := rand.Read(salt); err != nil {
-		return "", errors.New("無法建立管理密碼驗證值")
+		return "", errors.New("無法建立密碼驗證值")
 	}
 	hash := argon2.IDKey([]byte(password), salt, 3, 64*1024, 2, 32)
 	return passwordPrefix + base64.RawStdEncoding.EncodeToString(salt) + "$" + base64.RawStdEncoding.EncodeToString(hash), nil
@@ -40,7 +40,7 @@ func passwordParts(verifier string) ([]byte, []byte, error) {
 			}
 		}
 	}
-	return nil, nil, errors.New("管理密碼驗證值損毀；請保留資料並還原備份")
+	return nil, nil, errors.New("密碼驗證值損毀；請保留資料並還原備份")
 }
 
 func verifyPassword(verifier, password string) bool {
@@ -130,7 +130,7 @@ func (s *Server) setup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if in.Password == "" {
-		failure(w, errors.New("請輸入管理密碼"))
+		failure(w, errors.New("請輸入密碼"))
 		return
 	}
 	if in.Password != in.ConfirmPassword {
@@ -258,7 +258,7 @@ func (s *Server) changePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := s.DB.ChangeAdministratorPassword(r.Context(), previous, hash); err != nil {
-		JSON(w, 500, map[string]string{"error": "無法保存管理密碼，請重試"})
+		JSON(w, 500, map[string]string{"error": "無法保存密碼，請重試"})
 		return
 	}
 	s.mu.Lock()

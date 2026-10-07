@@ -1,6 +1,7 @@
 :root { --surface:#fff; color-scheme:light; }
 .appearance-controls { display:flex; align-items:center; gap:10px; }
 .theme-toggle { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; flex-shrink:0; border:1px solid var(--line); border-radius:8px; background:var(--surface); color:var(--ink); font-size:22px; line-height:1; }
+.theme-toggle svg { width:20px; height:20px; }
 .theme-toggle:hover { background:var(--accent-light); }
 html[data-theme="dark"] {
   color-scheme:dark;
@@ -15,7 +16,6 @@ html[data-theme="dark"] .button.subtle:hover,
 html[data-theme="dark"] .nav-item:hover,
 html[data-theme="dark"] .folder-row:hover,
 html[data-theme="dark"] .folder-row:focus-visible { background:#2d2939; }
-html[data-theme="dark"] .topbar { background:#14131bb5; }
 html[data-theme="dark"] .badge,
 html[data-theme="dark"] .filter-tabs { background:#2d2939; color:var(--muted); }
 html[data-theme="dark"] .badge.green { background:#20392f; color:var(--green); }
@@ -56,7 +56,6 @@ html[data-theme="dark"] .badge,
 html[data-theme="dark"] .version,
 html[data-theme="dark"] .brand b,
 html[data-theme="dark"] .nav-item,
-html[data-theme="dark"] .sidebar-bottom p,
 html[data-theme="dark"] .connection-pill,
 html[data-theme="dark"] .stat-card>span,
 html[data-theme="dark"] .stat-card small,
@@ -92,3 +91,5 @@ html[data-theme="dark"] .card-rule code,
 html[data-theme="dark"] .preview-result { color:var(--ink); }
 html[data-theme="dark"] .preview-result.success { color:var(--green); }
 html[data-theme="dark"] .filter-tabs button.selected { color:var(--accent); }
+
+html[data-theme="dark"] .nav-item.active { background:var(--accent-light); color:var(--accent); }

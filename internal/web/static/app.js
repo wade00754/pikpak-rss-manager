@@ -35,7 +35,11 @@ function showView(name) {
   if (!views[name]) return;
   currentView = name;
   for (const element of document.querySelectorAll('.view')) element.classList.toggle('hidden', element.id !== tr`view-${name}`);
-  for (const element of document.querySelectorAll('.nav-item')) element.classList.toggle('active', element.dataset.view === name);
+  for (const element of document.querySelectorAll('.nav-item')) {
+    const active=element.dataset.view===name;
+    element.classList.toggle('active',active);
+    if(active)element.setAttribute('aria-current','page');else element.removeAttribute('aria-current');
+  }
   $('#page-title').textContent=views[name];
   $('#clear-completed-jobs').classList.toggle('hidden', name !== 'jobs');
   $('.page-heading').classList.toggle('jobs-heading', name === 'jobs');
@@ -68,8 +72,7 @@ function render() {
   $('#sidebar-connection').innerHTML=tr`<span class="dot ${connected?'green':'amber'}"></span>${connected?t('PikPak 已連線'):status.paused?t('PikPak 已暫停'):t('尚未綁定 PikPak')}`;
   $('#settings-badge').className=tr`badge ${connected?'green':'orange'}`;
   $('#settings-badge').textContent=connected?t('連線正常'):status.paused?t('已暫停'):t('未綁定');
-  $('#connection-banner').classList.toggle('hidden',connected);
-  $('#connection-banner').textContent=status.message||(status.connected ? t('請重新檢查 PikPak 連線。') : t('先到「系統設定」綁定 PikPak，再開始自動追蹤。'));
+  $('#settings-connection-status').textContent=connected?'':status.message||t('請重新檢查 PikPak 連線。');
   $('#account-details').innerHTML=status.connected?tr`<div class="account-card"><span class="account-avatar">P</span><div><strong>${escapeHTML(status.name||t('PikPak 帳號'))}</strong><span>${formatBytes(status.storage_used)} / ${formatBytes(status.storage_total)} 雲端空間</span></div></div>`:'';
 }
 function formatBytes(value) { let n=Number(value||0); if (!Number.isFinite(n)) return '—'; const units=['B','KiB','MiB','GiB','TiB']; let i=0; while(n>=1024&&i<4){n/=1024;i++;} return tr`${n.toFixed(i?1:0)} ${units[i]}`; }
@@ -217,10 +220,22 @@ document.addEventListener('click',async event=>{
     if(button.dataset.delete){if(!confirm(t('刪除這筆訂閱？已建立的任務與雲端檔案會保留。')))return;await api(tr`/api/subscriptions/${button.dataset.delete}`,'DELETE');toast(t('訂閱已刪除'));await load();}
     if(button.dataset.retry){await api(tr`/api/jobs/${button.dataset.retry}/retry`,'POST',{});$('#job-dialog').close();toast(t('已重新核對或排入接續處理'));await load();}
     if(button.id==='check-connection'){await api('/api/settings/pikpak/check','POST',{});toast(t('PikPak 連線已更新；暫停的任務可個別接續'));await load();}
-    if(button.id==='logout'||button.id==='logout-mobile'){await api('/api/logout','POST',{});location.reload();}
+    if(button.id==='logout'){await api('/api/logout','POST',{});location.reload();}
   }catch(e){toast(e.message,true);}
   finally{button.disabled=false;}
 });
+function bindTokenForm(){
+  const form=$('#token-form'),onboarding=form.dataset.onboarding==='true';
+  form.addEventListener('submit',async event=>{
+    event.preventDefault();const button=$('#save-token');button.disabled=true;$('#token-error').textContent='';
+    try{
+      await api('/api/settings/pikpak','POST',{token:$('#token').value});$('#token').value='';
+      if(onboarding){location.hash='overview';location.reload();return;}
+      toast(t('PAT 已綁定'));await load();
+    }catch(e){$('#token').value='';$('#token-error').textContent=e.message;}
+    finally{button.disabled=false;}
+  });
+}
 async function start(){
   const session=await api('/api/session');csrf=session.csrf;
   if($('#setup-form')){
@@ -232,7 +247,7 @@ async function start(){
         const password=$('#setup-password').value,confirm=$('#setup-confirm').value;
         if(password!==confirm)throw new Error(t('兩次輸入的密碼不一致'));
         await api('/api/setup','POST',{password,confirm_password:confirm,public_url:$('#setup-public-url').value.trim(),allow_private_feeds:$('#setup-private-feeds').checked});
-        $('#setup-password').value='';$('#setup-confirm').value='';location.hash='settings';location.reload();
+        $('#setup-password').value='';$('#setup-confirm').value='';location.hash='';location.reload();
       }catch(e){$('#setup-password').value='';$('#setup-confirm').value='';$('#setup-error').textContent=e.message;}
       finally{button.disabled=false;}
     });return;
@@ -240,6 +255,8 @@ async function start(){
   if($('#login-form')){
     $('#login-form').addEventListener('submit',async event=>{event.preventDefault();const button=event.target.querySelector('button');button.disabled=true;$('#login-error').textContent='';try{await api('/api/login','POST',{password:$('#password').value});$('#password').value='';location.reload();}catch(e){$('#password').value='';$('#login-error').textContent=e.message;}finally{button.disabled=false;}});return;
   }
+  bindTokenForm();
+  if($('#token-form').dataset.onboarding==='true')return;
   $('#subscription-form').addEventListener('submit',async event=>{event.preventDefault();const button=event.target.querySelector('button[type=submit]');button.disabled=true;try{const id=$('#sub-id').value;const rule=formRule();if(manualTask){await api('/api/jobs','POST',{url:$('#sub-url').value.trim(),destination:$('#sub-destination').value.trim(),destination_id:$('#sub-destination-id').value,destination_account_ref:$('#sub-destination-account-ref').value});}else await api(tr`/api/subscriptions${id?'/'+id:''}`,id?'PUT':'POST',{name:rule.title,rss_url:$('#sub-url').value.trim(),destination:$('#sub-destination').value.trim(),destination_id:$('#sub-destination-id').value,destination_account_ref:$('#sub-destination-account-ref').value,enabled:$('#sub-enabled').checked,interval_minutes:Number($('#sub-interval').value),regex:rule.regex,rename_enabled:rule.rename_enabled,replacement:rule.replacement});closeFolderBrowser();$('#subscription-dialog').close();toast(manualTask?t('任務已新增'):t('訂閱設定已儲存'));await load();}catch(e){toast(e.message,true);}finally{button.disabled=false;}});
   $('#folder-create-form').addEventListener('submit',async event=>{
     event.preventDefault();if(!folderCreateContext)return;
@@ -251,7 +268,6 @@ async function start(){
   });
   $('#folder-create-dialog').addEventListener('cancel',()=>{folderCreateContext=null;});
   $('#subscription-dialog').addEventListener('close',()=>{closeFolderBrowser();clearSourceSamples();});
-  $('#token-form').addEventListener('submit',async event=>{event.preventDefault();const button=$('#save-token');button.disabled=true;try{await api('/api/settings/pikpak','POST',{token:$('#token').value});$('#token').value='';toast(t('PAT 已綁定'));await load();}catch(e){$('#token').value='';toast(e.message,true);}finally{button.disabled=false;}});
   $('#password-form').addEventListener('submit',async event=>{
     event.preventDefault();const form=event.target,button=form.querySelector('button[type=submit]');button.disabled=true;$('#password-error').textContent='';
     try{
@@ -274,4 +290,4 @@ async function start(){
   $('#sub-url').addEventListener('input',clearSourceSamples);$('#preview-source').addEventListener('change',selectSourceSample);
   setInterval(()=>{if(!document.hidden&&!$('#subscription-dialog').open&&!$('#job-dialog').open)load(true);},15000);
 }
-start().catch(e=>{if($('#setup-error'))$('#setup-error').textContent=e.message;else if($('#login-error'))$('#login-error').textContent=e.message;else toast(e.message,true);});
+start().catch(e=>{if($('#setup-error'))$('#setup-error').textContent=e.message;else if($('#login-error'))$('#login-error').textContent=e.message;else if($('#token-error'))$('#token-error').textContent=e.message;else toast(e.message,true);});
