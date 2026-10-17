@@ -5,6 +5,7 @@ export const messageUpdates: Record<string, string> = {
         '改名未確認，請檢查同名衝突後重試',
 };
 export const translations: Record<string, string> = {
+    '全選': 'Select all',
     '立即檢查 RSS': 'Check RSS now',
     '檢查所有啟用的 RSS 訂閱': 'Check all enabled RSS subscriptions',
     '正在檢查…': 'Checking…',
