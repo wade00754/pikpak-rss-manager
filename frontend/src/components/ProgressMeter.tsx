@@ -5,28 +5,29 @@ export function ProgressMeter({
     label,
     valueText,
     kind = 'progressbar',
-    segmented = false,
     warning = false,
     shape = 'line',
 }: {
-    value: number;
+    value?: number;
     label: string;
     valueText?: string;
     kind?: 'progressbar' | 'meter';
-    segmented?: boolean;
     warning?: boolean;
     shape?: 'line' | 'circle';
 }): JSX.Element {
-    const percent = Math.min(100, Math.max(0, value));
+    const unknown = value === undefined;
+    const percent = Math.min(100, Math.max(0, value ?? 0));
     return (
         <span
-            aria-label={label}
-            aria-valuemax={100}
-            aria-valuemin={0}
-            aria-valuenow={percent}
-            aria-valuetext={valueText}
+            aria-label={
+                unknown && valueText ? `${label} · ${valueText}` : label
+            }
+            aria-valuemax={unknown ? undefined : 100}
+            aria-valuemin={unknown ? undefined : 0}
+            aria-valuenow={unknown ? undefined : percent}
+            aria-valuetext={unknown ? undefined : valueText}
             className={`progress-meter${shape === 'circle' ? ' is-circular' : ''}${warning ? ' is-warning' : ''}`}
-            role={kind}
+            role={unknown ? 'img' : kind}
         >
             {shape === 'circle' ? (
                 <svg aria-hidden='true' viewBox='0 0 24 24'>
@@ -51,15 +52,6 @@ export function ProgressMeter({
                 >
                     <rect className='meter-track' height='4' width='100' />
                     <rect className='meter-fill' height='4' width={percent} />
-                    {segmented && (
-                        <path
-                            className='meter-segments'
-                            d={Array.from(
-                                { length: 19 },
-                                (_, i) => `M${(i + 1) * 5} 0v4`
-                            ).join(' ')}
-                        />
-                    )}
                 </svg>
             )}
         </span>

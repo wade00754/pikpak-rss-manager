@@ -20,32 +20,35 @@ function StorageMeter({ status }: { status: Status }): JSX.Element {
     return (
         <section
             aria-label={t('PikPak 空間')}
-            className='workspace-stat storage-stat'
+            className='storage-stat'
             title={
                 summary
                     ? [free, updated].filter(Boolean).join(' · ')
                     : undefined
             }
         >
-            <div className='workspace-stat-text'>
-                <Icon name='storage' />
-                <span>{summary ? capacity : t('空間資料暫不可用')}</span>
-                {summary && (
-                    <span className='storage-percent'>
-                        {Math.round(percent)}%
-                    </span>
-                )}
-            </div>
-            {summary && (
+            <Icon name='storage' />
+            <div className='workspace-stat storage-stat-content'>
+                <div className='workspace-stat-text'>
+                    <span>{summary ? capacity : t('空間資料暫不可用')}</span>
+                    {summary && (
+                        <span className='storage-percent'>
+                            {Math.round(percent)}%
+                        </span>
+                    )}
+                </div>
                 <ProgressMeter
                     kind='meter'
                     label={t('PikPak 空間')}
-                    segmented
-                    value={percent}
-                    valueText={`${capacity} · ${free}`}
+                    value={summary ? percent : undefined}
+                    valueText={
+                        summary
+                            ? `${capacity} · ${free}`
+                            : t('空間資料暫不可用')
+                    }
                     warning={percent >= 90}
                 />
-            )}
+            </div>
         </section>
     );
 }
@@ -126,14 +129,12 @@ function RssSchedule({
                         </>
                     )}
                 </span>
-                {active && (
-                    <ProgressMeter
-                        kind='meter'
-                        label={t('RSS 檢查週期')}
-                        value={elapsed}
-                        valueText={label}
-                    />
-                )}
+                <ProgressMeter
+                    kind='meter'
+                    label={t('RSS 檢查週期')}
+                    value={active ? elapsed : undefined}
+                    valueText={label}
+                />
             </div>
         </section>
     );

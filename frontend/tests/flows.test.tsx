@@ -882,7 +882,9 @@ describe('React flows', () => {
                         ? response({ error: '來源回傳非成功狀態' }, 400)
                         : response({
                               items: reads > 2 ? items.toReversed() : items,
-                              notices: [],
+                              notices: [
+                                  '種子檔名讀取逾時，已保留取得的檔名；可重新讀取。',
+                              ],
                           });
                 }
                 const body = JSON.parse(options?.body as string) as {
@@ -921,6 +923,13 @@ describe('React flows', () => {
         ]);
         await userEvent.keyboard('{Escape}');
         expect(await screen.findByText('rawS01E01.mkv')).toBeTruthy();
+        expect(screen.getByLabelText('替換結果').textContent).toBe(
+            'rawS01E01.mkv'
+        );
+        expect(screen.queryByText(/已讀取 \d+ 個種子檔名。/)).toBeNull();
+        expect(
+            screen.getByText('種子檔名讀取逾時，已保留取得的檔名；可重新讀取。')
+        ).toBeTruthy();
         expect(reads).toBe(1);
         await chooseOption(screen.getByLabelText('種子檔名'), 'raw[02].mkv');
         expect(await screen.findByText('rawS01E02.mkv')).toBeTruthy();

@@ -136,11 +136,7 @@ export function RenamePreview({
             selectedSample.current = items.at(Math.max(0, index));
             setNotices([...new Set(response.notices)]);
 
-            setNotice(
-                items.length > 0
-                    ? `已讀取 ${items.length} 個種子檔名。`
-                    : '目前 RSS 沒有可用的種子檔名。'
-            );
+            setNotice(items.length > 0 ? '' : '目前 RSS 沒有可用的種子檔名。');
         } catch (error_) {
             if (!controller.signal.aborted && !isCancelled(error_)) {
                 setNotice(errorMessage(error_));
@@ -162,6 +158,12 @@ export function RenamePreview({
             request.current?.abort();
         };
     }, [canLoad, renameEnabled, load]);
+    const sourceNotice = [
+        t(canLoad ? notice : '請填寫有效的 RSS 連結'),
+        ...notices.map(t),
+    ]
+        .filter(Boolean)
+        .join(' ');
     return (
         <div className='preview-box'>
             <div className='preview-heading'>
@@ -197,45 +199,50 @@ export function RenamePreview({
                     />
                 </FormField>
             )}
-            <p className='field-help' id='preview-source-help' role='status'>
-                {[
-                    t(canLoad ? notice : '請填寫有效的 RSS 連結'),
-                    ...notices.map(t),
-                ]
-                    .filter(Boolean)
-                    .join(' ')}
-            </p>
-            <div
-                aria-live='polite'
-                className={`preview-result${currentError ? ' error' : currentResult ? ' success' : ''}`}
+            {sourceNotice && (
+                <p
+                    className='field-help'
+                    id='preview-source-help'
+                    role='status'
+                >
+                    {sourceNotice}
+                </p>
+            )}
+            <FormField
+                className='preview-result-field'
                 id='preview-result'
+                label={t('替換結果')}
             >
-                {currentError ? (
-                    t(currentError)
-                ) : filename ? (
-                    currentResult ? (
-                        <>
-                            <div className='rename-preview-row'>
-                                <span>{t('替換結果')}</span>
-                                <code>{currentResult.name}</code>
-                            </div>
-                            {currentResult.raw_name !== undefined &&
-                                currentResult.raw_name !==
-                                    currentResult.name && (
-                                    <p className='preview-warning'>
-                                        {currentResult.warnings
-                                            ?.map(t)
-                                            .join(' ')}
-                                    </p>
-                                )}
-                        </>
+                <output
+                    aria-live='polite'
+                    className={`preview-result${currentError ? ' error' : currentResult ? ' success' : ''}`}
+                >
+                    {currentError ? (
+                        t(currentError)
+                    ) : filename ? (
+                        currentResult ? (
+                            <>
+                                <code className='rename-preview-filename'>
+                                    {currentResult.name}
+                                </code>
+                                {currentResult.raw_name !== undefined &&
+                                    currentResult.raw_name !==
+                                        currentResult.name && (
+                                        <span className='preview-warning'>
+                                            {currentResult.warnings
+                                                ?.map(t)
+                                                .join(' ')}
+                                        </span>
+                                    )}
+                            </>
+                        ) : (
+                            t('正在更新預覽…')
+                        )
                     ) : (
-                        t('正在更新預覽…')
-                    )
-                ) : (
-                    t('選擇種子檔名')
-                )}
-            </div>
+                        t('選擇種子檔名')
+                    )}
+                </output>
+            </FormField>
         </div>
     );
 }

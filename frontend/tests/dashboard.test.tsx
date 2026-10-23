@@ -249,6 +249,11 @@ describe('Dashboard telemetry', () => {
         );
         expect(screen.queryByRole('meter', { name: 'PikPak 空間' })).toBeNull();
         expect(screen.getByText('空間資料暫不可用')).toBeTruthy();
+        expect(
+            screen
+                .getByRole('img', { name: 'PikPak 空間 · 空間資料暫不可用' })
+                .getAttribute('aria-valuenow')
+        ).toBeNull();
         rerender(
             <Preferences>
                 <WorkspaceSummary
@@ -315,6 +320,9 @@ describe('Dashboard telemetry', () => {
             expect(
                 screen.queryByRole('meter', { name: 'RSS 檢查週期' })
             ).toBeNull();
+            expect(
+                screen.getByRole('img', { name: 'RSS 檢查週期 · RSS 已暫停' })
+            ).toBeTruthy();
             rerender(
                 <Preferences>
                     <WorkspaceSummary
@@ -327,6 +335,9 @@ describe('Dashboard telemetry', () => {
                 screen.getByRole('region', { name: '下次 RSS 檢查' })
                     .textContent
             ).toBe('下次檢查 · 尚無啟用訂閱');
+            expect(
+                screen.getByRole('img', { name: 'RSS 檢查週期 · 尚無啟用訂閱' })
+            ).toBeTruthy();
         } finally {
             vi.useRealTimers();
         }

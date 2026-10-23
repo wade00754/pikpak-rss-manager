@@ -131,6 +131,7 @@
     }
 }
 .preview-warning {
+    display: block;
     font-family: inherit;
     font-size: 11px;
     color: var(--warning);
@@ -151,23 +152,17 @@
 #enabled-field {
     margin-bottom: 24px;
 }
-.rename-preview-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 7px;
+.preview-result-field {
+    margin-top: 16px;
 }
-.rename-preview-row > span {
-    color: var(--muted);
-    font-size: 11px;
-}
-.rename-preview-row > code {
+.rename-preview-filename {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     color: var(--ink);
 }
 .filename-select .select-value,
 .filename-select .select-option,
-.rename-preview-row > code {
+.rename-preview-filename {
     font-family: 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
     font-size: 12px;
     font-weight: 400;

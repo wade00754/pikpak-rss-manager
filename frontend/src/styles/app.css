@@ -714,21 +714,19 @@ dialog::backdrop {
 }
 
 .preview-result {
-    margin-top: 15px;
-    border-radius: 7px;
+    display: block;
+    min-height: 40px;
+    border-radius: 8px;
     background: var(--surface);
-    border: 1px dashed var(--line);
-    padding: 12px;
-    font-size: 11px;
+    border: 1px solid var(--line);
+    padding: 8px 12px;
+    font-size: 12px;
     color: var(--muted);
     overflow-wrap: anywhere;
 }
 
 .preview-result.success {
     color: var(--ink);
-    background: var(--surface-inset);
-    border-style: solid;
-    border-color: var(--line);
 }
 
 .preview-result.error {
@@ -1739,7 +1737,8 @@ button.connection-pill:hover {
 }
 @media (max-width: 650px) {
     .select-trigger,
-    .select-option {
+    .select-option,
+    .preview-result {
         min-height: 44px;
     }
 }

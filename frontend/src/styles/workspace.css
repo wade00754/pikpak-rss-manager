@@ -38,16 +38,13 @@
 }
 .workspace-stat {
     display: grid;
-    position: relative;
+    grid-template-rows: auto var(--workspace-meter-size);
     align-content: center;
     align-items: center;
+    gap: var(--workspace-focus-room);
     min-height: var(--workspace-control-size);
     min-width: 0;
     color: var(--muted);
-}
-.workspace-stat > .progress-meter {
-    position: absolute;
-    inset: calc(50% + 0.8em + var(--workspace-focus-room)) 0 auto;
 }
 .workspace-stat-text {
     display: flex;
@@ -56,11 +53,14 @@
     min-width: 0;
     font-variant-numeric: tabular-nums;
 }
-.workspace-stat-text .ui-icon {
+.storage-stat > .ui-icon {
     width: var(--workspace-control-icon-size);
     height: var(--workspace-control-icon-size);
+    flex-shrink: 0;
+    color: var(--muted);
 }
-.rss-schedule {
+.rss-schedule,
+.storage-stat {
     display: flex;
     align-items: center;
     gap: var(--workspace-edge-space);
@@ -77,7 +77,8 @@
 .rss-refresh:disabled:not([aria-busy='true']) {
     cursor: default;
 }
-.rss-schedule-content {
+.rss-schedule-content,
+.storage-stat-content {
     flex: 1;
     min-width: 0;
 }
@@ -112,10 +113,6 @@
 }
 .is-warning .meter-fill {
     fill: var(--danger);
-}
-.meter-segments {
-    stroke: var(--canvas);
-    stroke-width: 1;
 }
 .progress-meter.is-circular {
     width: var(--workspace-control-icon-size);
@@ -376,6 +373,7 @@
     }
     .workspace-stat-text {
         flex-wrap: wrap;
+        row-gap: 0;
     }
     .storage-stat .ui-icon {
         display: none;
