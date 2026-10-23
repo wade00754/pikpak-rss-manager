@@ -1,12 +1,6 @@
 import type { IconName } from '../components/Icon.js';
 import type { Job } from './types.js';
 
-export const runningStates = [
-    'queued',
-    'submitting',
-    'downloading',
-    'organizing',
-];
 export const reviewStates = [
     'needs_review',
     'submission_unknown',

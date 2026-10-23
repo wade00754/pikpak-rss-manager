@@ -315,24 +315,6 @@ h3 {
     color: var(--muted);
 }
 
-.page-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 29px;
-}
-
-.page-heading p {
-    font-size: 12px;
-    margin-bottom: 0;
-}
-
-.heading-actions {
-    display: flex;
-    gap: 10px;
-}
-
 .section-heading {
     display: flex;
     justify-content: space-between;
@@ -371,10 +353,6 @@ h3 {
     font-size: 10px;
 }
 
-.table-scroll {
-    overflow-x: auto;
-}
-
 table {
     border-collapse: collapse;
     width: 100%;
@@ -403,11 +381,6 @@ tr:last-child td {
     border-bottom: 0;
 }
 
-.nowrap {
-    white-space: nowrap;
-    font-size: 10px;
-}
-
 .empty-state {
     text-align: center;
     padding: 46px 24px;
@@ -430,23 +403,6 @@ tr:last-child td {
     font-size: 11px;
     color: var(--muted);
     margin-bottom: 20px;
-}
-
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 12px;
-}
-
-.toolbar > input {
-    max-width: 350px;
-    background: var(--surface);
-}
-
-.toolbar > .muted {
-    font-size: 11px;
 }
 
 .event-row {
@@ -961,35 +917,10 @@ dialog::backdrop {
     margin-left: auto;
 }
 
-@media (min-width: 1500px) {
-    .page-heading {
-        margin-bottom: 35px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .heading-actions {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-
-    .page-heading h1 {
-        font-size: 26px;
-    }
-}
-
 @media (max-width: 900px) {
     .brand {
         font-size: 15px;
         gap: 12px;
-    }
-
-    .page-heading {
-        align-items: flex-start;
-    }
-
-    .page-heading h1 {
-        font-size: 24px;
     }
 
     .toast {
@@ -1014,39 +945,8 @@ dialog::backdrop {
         font-size: 18px;
     }
 
-    .page-heading {
-        gap: 12px;
-        margin-bottom: 24px;
-    }
-
-    .page-heading h1 {
-        font-size: 23px;
-    }
-
-    .page-heading p {
-        font-size: 10px;
-    }
-
-    .heading-actions > .button {
-        font-size: 11px;
-        padding: 9px 11px;
-    }
-
     .section-heading {
         margin-top: 25px;
-    }
-
-    .toolbar {
-        align-items: flex-start;
-    }
-
-    .toolbar > input {
-        max-width: 75%;
-    }
-
-    .toolbar > .muted {
-        font-size: 9px;
-        margin-top: 10px;
     }
 
     th,
@@ -1155,11 +1055,6 @@ textarea {
         max-height: calc(94dvh - 2px);
         padding: 22px;
     }
-}
-
-#view-jobs .toolbar {
-    flex-wrap: wrap;
-    gap: 12px;
 }
 /* First-run setup shares the login layout and existing theme tokens. */
 .onboarding-progress {
@@ -1395,9 +1290,6 @@ button.connection-pill:hover {
     min-height: 44px;
     padding: 8px;
 }
-.page-heading h1 {
-    margin: 0;
-}
 .workspace-idle {
     color: var(--muted);
     padding: 16px 0;
@@ -1566,10 +1458,6 @@ button.connection-pill:hover {
 #utility-dialog .settings-panel .form-actions {
     flex-wrap: wrap;
 }
-#utility-dialog .close-utility {
-    width: 44px;
-    height: 44px;
-}
 @media (max-width: 650px) {
     .subscription-toggle {
         width: 44px;
@@ -1612,15 +1500,6 @@ button.connection-pill:hover {
 }
 .token-submit .button {
     width: 100%;
-}
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
 }
 .theme-toggle svg {
     width: 20px;
