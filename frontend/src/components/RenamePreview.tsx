@@ -184,6 +184,7 @@ export function RenamePreview({
             {samples.length > 0 && (
                 <FormField id='preview-source' label={t('種子檔名')}>
                     <Select
+                        className='filename-select'
                         onValueChange={(value) => {
                             setSelected(value);
                             selectedSample.current = samples.at(Number(value));

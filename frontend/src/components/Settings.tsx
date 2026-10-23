@@ -3,7 +3,7 @@ import type { JSX } from 'react';
 
 import { api, setCSRF } from '../lib/api.js';
 import { errorMessage, isCancelled } from '../lib/i18n.js';
-import { formatBytes } from '../lib/jobs.js';
+import { storageSummary } from '../lib/storage.js';
 import type { AppSettings, Session, Status } from '../lib/types.js';
 import { DirtyForm } from './DirtyForm.js';
 import { CheckboxField, Feedback, FormField } from './FormField.js';
@@ -24,6 +24,7 @@ export function Settings({
     const { t } = usePreferences();
     const [section, setSection] = useState('pikpak');
     const connected = status.connected && !status.paused;
+    const storage = storageSummary(status);
     return (
         <section className='utility-view' id='view-settings'>
             <SettingsLayout
@@ -63,11 +64,11 @@ export function Settings({
                                 <strong>
                                     {status.name || t('PikPak 帳號')}
                                 </strong>
-                                <span>
-                                    {formatBytes(status.storage_used)} /{' '}
-                                    {formatBytes(status.storage_total)}{' '}
-                                    {t('雲端空間')}
-                                </span>
+                                {storage && (
+                                    <span>
+                                        {storage.capacity} {t('雲端空間')}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     )}

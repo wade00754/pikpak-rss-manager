@@ -194,7 +194,7 @@ describe('Dashboard telemetry', () => {
         ).toHaveLength(3);
         expect(button).toHaveProperty('disabled', false);
     });
-    it('shows storage capacity and free space, without presenting missing data as zero usage', () => {
+    it('shows raw bytes and official formatted storage, without presenting missing data as zero usage', () => {
         const subscriptions: Subscription[] = [];
         const { rerender } = render(
             <Preferences>
@@ -212,6 +212,33 @@ describe('Dashboard telemetry', () => {
         expect(meter.getAttribute('aria-valuenow')).toBe('25');
         expect(meter.getAttribute('aria-valuetext')).toContain('剩餘 750 B');
         expect(screen.getByText('250 B / 1000 B')).toBeTruthy();
+        rerender(
+            <Preferences>
+                <WorkspaceSummary
+                    status={{
+                        connected: true,
+                        storage_used: '2.50 TB',
+                        storage_total: '10.00 TB',
+                    }}
+                    subscriptions={subscriptions}
+                />
+            </Preferences>
+        );
+        expect(screen.getByText('2.50 TB / 10.00 TB')).toBeTruthy();
+        expect(meter.getAttribute('aria-valuenow')).toBe('25');
+        rerender(
+            <Preferences>
+                <WorkspaceSummary
+                    status={{
+                        connected: true,
+                        storage_used: '512 GiB',
+                        storage_total: '1 TiB',
+                    }}
+                    subscriptions={subscriptions}
+                />
+            </Preferences>
+        );
+        expect(meter.getAttribute('aria-valuenow')).toBe('50');
         rerender(
             <Preferences>
                 <WorkspaceSummary

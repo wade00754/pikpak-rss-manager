@@ -38,13 +38,16 @@
 }
 .workspace-stat {
     display: grid;
-    grid-template-rows: auto var(--workspace-meter-size);
+    position: relative;
     align-content: center;
     align-items: center;
-    gap: var(--workspace-focus-room);
     min-height: var(--workspace-control-size);
     min-width: 0;
     color: var(--muted);
+}
+.workspace-stat > .progress-meter {
+    position: absolute;
+    inset: calc(50% + 0.8em + var(--workspace-focus-room)) 0 auto;
 }
 .workspace-stat-text {
     display: flex;

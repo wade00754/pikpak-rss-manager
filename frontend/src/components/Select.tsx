@@ -39,7 +39,7 @@ export function Select({
                 </SelectPrimitive.Trigger>
                 <SelectPrimitive.Content
                     align='start'
-                    className='select-menu'
+                    className={`select-menu ${className}`}
                     collisionPadding={16}
                     position='popper'
                     sideOffset={8}

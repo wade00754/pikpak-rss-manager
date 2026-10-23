@@ -3,6 +3,8 @@ package web_test
 import (
 	"context"
 	"errors"
+	"fmt"
+	"net/http"
 	"net/http/httptest"
 	"os"
 	"sync"
@@ -38,7 +40,7 @@ func (m *fixtureManager) Status() pikpak.Status {
 	if !m.connected {
 		return pikpak.Status{}
 	}
-	return pikpak.Status{Connected: true, Source: "database", Name: "Fixture account", StorageTotal: "1073741824", StorageUsed: "0"}
+	return pikpak.Status{Connected: true, Source: "database", Name: "Fixture account", StorageTotal: "10.00 TB", StorageUsed: "2.50 TB"}
 }
 func (m *fixtureManager) Bind(ctx context.Context, token string) error {
 	if token != "fixture-pat" {
@@ -74,6 +76,19 @@ func TestBrowserFixture(t *testing.T) {
 	server := httptest.NewServer(s.Handler())
 	defer server.Close()
 	t.Log("UI_FIXTURE_URL=" + server.URL)
+	var source *httptest.Server
+	source = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/sample.torrent" {
+			w.Header().Set("Content-Type", "application/x-bittorrent")
+			name := "[Fixture] Example - 01.mkv"
+			fmt.Fprintf(w, "d4:infod6:lengthi1e4:name%d:%s12:piece lengthi16384e6:pieces20:00000000000000000000ee", len(name), name)
+			return
+		}
+		w.Header().Set("Content-Type", "application/rss+xml")
+		fmt.Fprintf(w, `<rss version="2.0"><channel><title>Fixture feed</title><item><title>Fixture episode</title><enclosure url="%s/sample.torrent" type="application/x-bittorrent" /></item></channel></rss>`, source.URL)
+	}))
+	defer source.Close()
+	t.Log("RSS_FIXTURE_URL=" + source.URL)
 	// A file signal allows the browser driver to finish and run deferred cleanup.
 	for deadline := time.Now().Add(15 * time.Minute); time.Now().Before(deadline); {
 		if stop := os.Getenv("PIKPAK_BROWSER_STOP"); stop != "" {

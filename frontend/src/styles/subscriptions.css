@@ -153,9 +153,8 @@
 }
 .rename-preview-row {
     display: grid;
-    grid-template-columns: 86px minmax(0, 1fr);
-    gap: 10px;
-    padding: 7px 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
 }
 .rename-preview-row > span {
     color: var(--muted);
@@ -165,7 +164,15 @@
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     color: var(--ink);
+}
+.filename-select .select-value,
+.filename-select .select-option,
+.rename-preview-row > code {
+    font-family: 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
     font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    font-variant-ligatures: none;
 }
 @media (max-width: 600px) {
     .destination-input {
@@ -183,10 +190,6 @@
     }
     .folder-actions > .button {
         margin-left: auto;
-    }
-    .rename-preview-row {
-        grid-template-columns: 1fr;
-        gap: 4px;
     }
 }
 

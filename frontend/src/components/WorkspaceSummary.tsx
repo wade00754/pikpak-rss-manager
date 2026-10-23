@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { JSX } from 'react';
 
-import { formatBytes } from '../lib/jobs.js';
+import { storageSummary } from '../lib/storage.js';
 import type { Status, Subscription } from '../lib/types.js';
 import { Icon } from './Icon.js';
 import { usePreferences } from './Preferences.js';
@@ -9,19 +9,9 @@ import { ProgressMeter } from './ProgressMeter.js';
 
 function StorageMeter({ status }: { status: Status }): JSX.Element {
     const { language, t } = usePreferences();
-    const used = Number(status.storage_used);
-    const total = Number(status.storage_total);
-    const valid =
-        status.connected &&
-        status.storage_used?.trim() &&
-        status.storage_total?.trim() &&
-        Number.isFinite(used) &&
-        Number.isFinite(total) &&
-        used >= 0 &&
-        total > 0;
-    const percent = valid ? Math.min(100, (used / total) * 100) : 0;
-    const capacity = `${formatBytes(status.storage_used)} / ${formatBytes(status.storage_total)}`;
-    const free = t(`剩餘 ${formatBytes(String(Math.max(0, total - used)))}`);
+    const summary = storageSummary(status);
+    const { capacity = '', percent = 0 } = summary ?? {};
+    const free = summary ? t(`剩餘 ${summary.free}`) : '';
     const updated = status.storage_updated_at
         ? t(
               `上次更新 ${new Date(status.storage_updated_at * 1000).toLocaleTimeString(language === 'en' ? 'en-US' : 'zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false })}`
@@ -32,19 +22,21 @@ function StorageMeter({ status }: { status: Status }): JSX.Element {
             aria-label={t('PikPak 空間')}
             className='workspace-stat storage-stat'
             title={
-                valid ? [free, updated].filter(Boolean).join(' · ') : undefined
+                summary
+                    ? [free, updated].filter(Boolean).join(' · ')
+                    : undefined
             }
         >
             <div className='workspace-stat-text'>
                 <Icon name='storage' />
-                <span>{valid ? capacity : t('空間資料暫不可用')}</span>
-                {valid && (
+                <span>{summary ? capacity : t('空間資料暫不可用')}</span>
+                {summary && (
                     <span className='storage-percent'>
                         {Math.round(percent)}%
                     </span>
                 )}
             </div>
-            {valid && (
+            {summary && (
                 <ProgressMeter
                     kind='meter'
                     label={t('PikPak 空間')}

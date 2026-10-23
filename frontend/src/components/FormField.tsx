@@ -148,7 +148,7 @@ export function Feedback({
     status?: boolean;
 }): JSX.Element | null {
     return message ? (
-        <p className='error field-help' role={status ? 'status' : 'alert'}>
+        <p className='form-feedback' role={status ? 'status' : 'alert'}>
             {message}
         </p>
     ) : null;
