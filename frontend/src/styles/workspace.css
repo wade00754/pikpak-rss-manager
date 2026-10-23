@@ -54,9 +54,9 @@
     font-variant-numeric: tabular-nums;
 }
 .storage-stat > .ui-icon {
-    width: var(--workspace-control-icon-size);
-    height: var(--workspace-control-icon-size);
-    flex-shrink: 0;
+    padding: calc(
+        (var(--workspace-control-size) - var(--workspace-control-icon-size)) / 2
+    );
     color: var(--muted);
 }
 .rss-schedule,
@@ -66,7 +66,8 @@
     gap: var(--workspace-edge-space);
     min-width: 0;
 }
-.rss-refresh {
+.rss-refresh,
+.storage-stat > .ui-icon {
     width: var(--workspace-control-size);
     height: var(--workspace-control-size);
     flex-shrink: 0;
