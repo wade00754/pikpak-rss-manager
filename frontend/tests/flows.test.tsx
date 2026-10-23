@@ -834,7 +834,9 @@ describe('React flows', () => {
                 />
             </Preferences>
         );
-        await userEvent.click(await screen.findByRole('checkbox'));
+        await userEvent.click(
+            await screen.findByRole('checkbox', { name: /^公開測試/ })
+        );
         await userEvent.click(
             screen.getByRole('button', { name: '下載所選項目' })
         );

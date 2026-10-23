@@ -22,8 +22,17 @@ export function BackfillPanel({
     const active = useLifetime();
     const [error, setError] = useState('');
     const [pending, setPending] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
     const [plan, setPlan] = useState<BackfillPlan | null>(null);
     const [selected, setSelected] = useState<string[]>([]);
+    const available =
+        plan?.items.filter((item) => !item.error).map((item) => item.id) ?? [];
+    const selectedCount = available.filter((id) =>
+        selected.includes(id)
+    ).length;
+    const allSelected =
+        available.length > 0 && selectedCount === available.length;
+    const partiallySelected = selectedCount > 0 && !allSelected;
     useEffect(() => {
         const controller = new AbortController();
         void api<BackfillPlan>(
@@ -60,6 +69,7 @@ export function BackfillPanel({
                     return;
                 }
                 setPending(true);
+                setSubmitted(true);
                 setError('');
                 void api(
                     `/api/subscriptions/${subscriptionID}/backfill`,
@@ -104,12 +114,29 @@ export function BackfillPanel({
                             .join(' ')
                       : t('正在讀取下載清單…')}
             </p>
+            <label className='checkbox-label'>
+                <input
+                    checked={allSelected}
+                    disabled={available.length === 0 || submitted}
+                    id='backfill-select-all'
+                    onChange={(event) => {
+                        setSelected(event.target.checked ? available : []);
+                    }}
+                    ref={(input) => {
+                        if (input) {
+                            input.indeterminate = partiallySelected;
+                        }
+                    }}
+                    type='checkbox'
+                />
+                <span>{t('全選')}</span>
+            </label>
             <div id='backfill-list'>
                 {plan?.items.map((item) => (
                     <label className='backfill-choice' key={item.id}>
                         <input
                             checked={selected.includes(item.id)}
-                            disabled={pending || Boolean(item.error)}
+                            disabled={submitted || Boolean(item.error)}
                             onChange={(event) => {
                                 setSelected((values) =>
                                     event.target.checked
