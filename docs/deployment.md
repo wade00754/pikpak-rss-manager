@@ -29,6 +29,8 @@ Save the public origin in Settings and access the UI from that origin. Preserve 
 
 ## Update
 
+The v2.1.3 ARM64 image contains an amd64 executable and can fail with `exec format error`. Upgrade to v2.1.4 or newer, pull the image and recreate the container. Keep the existing data volume.
+
 v2.0.0 uses direct downloads and Regex replacement only. PAT permissions are **Read & write files** and **Cloud Download**. Manage files is not required. Legacy staging, overwrite/backup, cleanup and template naming are no longer supported. Do not reuse databases containing staged jobs or template rules. No cloud content is migrated or removed. Back up the complete data volume before upgrading. Downgrades require restoring a pre-upgrade backup.
 
 ```sh

@@ -7,8 +7,8 @@ COPY frontend/ ./
 RUN npm run build
 
 FROM --platform=$BUILDPLATFORM golang:1.27.1-alpine AS build
-ARG TARGETOS=linux
-ARG TARGETARCH=amd64
+ARG TARGETOS
+ARG TARGETARCH
 ARG VERSION
 WORKDIR /src
 COPY go.mod go.sum ./

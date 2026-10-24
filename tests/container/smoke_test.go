@@ -53,7 +53,7 @@ func TestComposeSmoke(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("PASS: Compose startup without env file, version %s, Web setup, login after restart, regex previews, non-root and subscription persistence", version)
+	t.Logf("PASS: image and executable architectures match, Compose startup without env file, version %s, Web setup, login after restart, regex previews, non-root and subscription persistence", version)
 }
 
 type smokeOptions struct {
@@ -117,19 +117,22 @@ func composeSmoke(ctx context.Context, docker dockerRunner, options smokeOptions
 	if _, err := compose(ctx, "up", "-d", "--pull", "never"); err != nil {
 		return "", err
 	}
-	client, err := newSmokeClient(options.baseURL)
-	if err != nil {
-		return "", err
-	}
-	if err := client.ready(ctx); err != nil {
-		return "", err
-	}
 	container, err := compose(ctx, "ps", "-q", "pikpak-rss-manager")
 	if err != nil {
 		return "", err
 	}
 	if container == "" || strings.ContainsAny(container, "\r\n") {
 		return "", errors.New("expected exactly one Compose service container")
+	}
+	if err := checkContainerArchitecture(ctx, docker, container, directory, options.platform); err != nil {
+		return "", err
+	}
+	client, err := newSmokeClient(options.baseURL)
+	if err != nil {
+		return "", err
+	}
+	if err := client.ready(ctx); err != nil {
+		return "", err
 	}
 	user, err := docker(ctx, "inspect", "--format", "{{.Config.User}}", container)
 	if err != nil {

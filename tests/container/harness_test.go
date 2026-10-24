@@ -2,6 +2,7 @@ package container
 
 import (
 	"context"
+	"debug/elf"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -51,7 +52,19 @@ func TestSmokeHarnessWithIsolatedWebService(t *testing.T) {
 	starts, cleanups := 0, 0
 	runner := func(ctx context.Context, args ...string) (string, error) {
 		if args[0] == "inspect" {
+			if args[2] == "{{.Image}}" {
+				return "fixture-image-id", nil
+			}
 			return "65532:65532", nil
+		}
+		if args[0] == "image" {
+			if args[len(args)-1] != "fixture-image-id" {
+				t.Fatal("architecture inspection must use the container's image ID")
+			}
+			return "linux/amd64", nil
+		}
+		if args[0] == "cp" {
+			return "", os.WriteFile(args[2], elfFixture(elf.EM_X86_64), 0600)
 		}
 		if args[0] == "exec" {
 			if args[len(args)-1] == "version" {

@@ -110,6 +110,8 @@ make test-manifest IMAGE=ghcr.io/wade00754/pikpak-rss-manager:latest
 
 Regular tests use mocks and local fixtures. Real PikPak tests are opt-in and use a PAT already configured through the Web UI. Set `PIKPAK_LIVE_DATA_DIR` if the local data directory differs from `data`. No PAT is sent to CI.
 
+Container checks compare the executable's ELF architecture with the image platform. CI, publication validation and anonymous-pull smoke tests run containers on native amd64 and arm64 runners. This catches mislabeled binaries that emulation can otherwise conceal.
+
 | Scope | Opt-in variable | Test |
 |---|---|---|
 | Folder browsing and creation | `PIKPAK_LIVE_FOLDERS_TEST=1` | `TestLiveFolderBrowsingAndCreation` |
